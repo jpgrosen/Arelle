@@ -389,10 +389,8 @@ def orderedPackagesConfig():
          ('remappings',dict(sorted(packagesConfig['remappings'].items())))))
 
 def save(cntlr: Cntlr) -> None:
-    global packagesConfigChanged
-    if packagesJsonFile is None:
-        print("packagesJsonFile is none")
-        packagesJsonFile = cntlr.userAppDir + os.sep + "taxonomyPackages.json"
+    global packagesConfigChanged, packagesJsonFile
+    packagesJsonFile = cntlr.userAppDir + os.sep + "taxonomyPackages.json"
     if packagesConfigChanged and cntlr.hasFileSystem:
         with open(packagesJsonFile, "w", encoding='utf-8') as f:
             jsonStr = str(json.dumps(orderedPackagesConfig(), ensure_ascii=False, indent=2)) # might not be unicode in 2.7
