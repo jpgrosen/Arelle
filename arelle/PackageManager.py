@@ -343,9 +343,10 @@ _cntlr = None
 
 def init(cntlr: Cntlr, loadPackagesConfig: bool = True) -> None:
     global packagesJsonFile, packagesConfig, packagesMappings, _cntlr
+    packagesJsonFile = cntlr.userAppDir + os.sep + "taxonomyPackages.json"
+    print("Setting packagesJsonFile to "+packagesJsonFile)
     if loadPackagesConfig:
         try:
-            packagesJsonFile = cntlr.userAppDir + os.sep + "taxonomyPackages.json"
             with open(packagesJsonFile, encoding='utf-8') as f:
                 packagesConfig = json.load(f)
             packagesConfigChanged = False
@@ -389,6 +390,9 @@ def orderedPackagesConfig():
 
 def save(cntlr: Cntlr) -> None:
     global packagesConfigChanged
+    if packagesJsonFile is None:
+        print("packagesJsonFile is none")
+        packagesJsonFile = cntlr.userAppDir + os.sep + "taxonomyPackages.json"
     if packagesConfigChanged and cntlr.hasFileSystem:
         with open(packagesJsonFile, "w", encoding='utf-8') as f:
             jsonStr = str(json.dumps(orderedPackagesConfig(), ensure_ascii=False, indent=2)) # might not be unicode in 2.7
